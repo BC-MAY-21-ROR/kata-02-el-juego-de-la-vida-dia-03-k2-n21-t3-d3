@@ -34,13 +34,47 @@ class Grid
       puts
     end
   end
-  attr_reader :matrix, :matrix2
+
+  def next_generation
+    generate
+    print_matriz(@matrix)
+    (0..@height - 2).each do |h|
+      (0..@width - 2).each do |w|
+        cells_rules(h, w, neighbors(h, w))
+      end
+    end
+    puts
+    print_matriz(@matrix2)
+  end
+
+  def neighbors(hei, wid)
+    cells_around = 0
+    (-1..1).each do |h| # height y/a
+      (-1..1).each do |w| # width x/b
+        a = hei + h
+        b = wid + w
+        cells_around += @matrix[a][b] if a >= 0 || b >= 0
+      end
+    end
+    cells_around -= @matrix[hei][wid]
+  end
+
+  def cells_rules(hei, wid, neighbors)
+    @matrix2[hei][wid ] = if @matrix[hei][wid] == 1 && neighbors < 2
+                            0
+                          elsif @matrix[hei][wid] == 1 && neighbors > 3
+                            0
+                          elsif @matrix[hei][wid].zero? && neighbors == 3
+                            1
+                          else
+                            @matrix[hei][wid]
+                          end
+  end
+  # attr_reader :matrix, :matrix2
 end
-
-grid = Grid.new(5, 6)
-
-grid.generate
-# matriz = grid.matrix
-grid.print_matriz(grid.matrix)
-puts
-grid.print_matriz(grid.matrix2)
+puts 'Dame el numero de filas:'
+fil = gets.to_i
+puts 'Dame el numero de columnas:'
+col = gets.to_i
+grid = Grid.new(fil, col)
+grid.next_generation
