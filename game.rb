@@ -37,13 +37,14 @@ class Grid
 
   def next_generation
     generate
+    print "\n\n"
     print_matriz(@matrix)
+    print "\n\n"
     (0..@height - 2).each do |h|
       (0..@width - 2).each do |w|
         cells_rules(h, w, neighbors(h, w))
       end
     end
-    puts
     print_matriz(@matrix2)
   end
 
@@ -72,9 +73,16 @@ class Grid
   end
   # attr_reader :matrix, :matrix2
 end
-puts 'Dame el numero de filas:'
-fil = gets.to_i
-puts 'Dame el numero de columnas:'
-col = gets.to_i
-grid = Grid.new(fil, col)
-grid.next_generation
+
+require 'rspec/autorun'
+
+describe Grid do
+  it '5  and 6' do
+    grid = Grid.new(5, 6)
+    expect(grid.next_generation)
+  end
+  it '7 and 9' do
+    grid = Grid.new(7, 9)
+    expect(grid.next_generation)
+  end
+end
